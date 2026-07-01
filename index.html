@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Soufi Garden 360 — Interactive Preview | ESDU</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="An interactive 360° preview of Soufi Garden, an ESDU sustainability project." />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5.14.3/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/video-plugin@5.14.3/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.14.3/index.min.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Top bar -->
+  <header id="top-bar">
+    <div id="top-bar-title">
+      <span id="scene-title">Loading…</span>
+    </div>
+    <div id="top-bar-progress" aria-live="polite">
+      <span id="progress-current">–</span>&nbsp;/&nbsp;<span id="progress-total">–</span>
+    </div>
+  </header>
+
+  <!-- Viewer -->
+  <div id="viewer-shell">
+    <div id="viewer"></div>
+
+    <!-- Custom loading overlay -->
+    <div id="loading-overlay">
+      <div id="loading-spinner" aria-hidden="true">
+        <svg viewBox="0 0 50 50">
+          <circle class="spinner-track" cx="25" cy="25" r="20" fill="none" stroke-width="3"></circle>
+          <circle class="spinner-arc" cx="25" cy="25" r="20" fill="none" stroke-width="3"></circle>
+        </svg>
+      </div>
+      <p id="loading-text">Loading area…</p>
+    </div>
+
+    <!-- Tilt-to-look prompt (mobile gyroscope) -->
+    <button id="gyro-prompt" type="button" class="hidden">
+      <span class="gyro-icon" aria-hidden="true">⟳</span>
+      Tap to enable tilt controls
+    </button>
+
+    <!-- Marker popup card -->
+    <div id="popup-backdrop" class="hidden"></div>
+    <div id="popup-card" class="hidden" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+      <button id="popup-close" type="button" aria-label="Close">✕</button>
+      <div id="popup-image-wrap" class="hidden">
+        <img id="popup-image" alt="" />
+      </div>
+      <h3 id="popup-title"></h3>
+      <p id="popup-description"></p>
+    </div>
+  </div>
+
+  <!-- Bottom controls -->
+  <footer id="controls-bar">
+    <button id="btn-prev" type="button" class="control-btn" aria-label="Previous area">
+      <svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8" /></svg>
+    </button>
+
+    <button id="btn-playpause" type="button" class="control-btn control-btn--primary" aria-label="Play or pause">
+      <svg id="icon-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z" /></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24" class="hidden"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+    </button>
+
+    <button id="btn-reset" type="button" class="control-btn" aria-label="Reset view">
+      <svg viewBox="0 0 24 24"><path d="M12 5V2L7 7l5 5V9a5 5 0 11-5 5H5a7 7 0 107-9z" /></svg>
+    </button>
+
+    <button id="btn-next" type="button" class="control-btn" aria-label="Next area">
+      <svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8" /></svg>
+    </button>
+  </footer>
+
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+    "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5.14.3/index.module.js",
+    "@photo-sphere-viewer/video-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/video-plugin@5.14.3/index.module.js",
+    "@photo-sphere-viewer/equirectangular-video-adapter": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/equirectangular-video-adapter@5.14.3/index.module.js",
+    "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.14.3/index.module.js",
+    "@photo-sphere-viewer/gyroscope-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/gyroscope-plugin@5.14.3/index.module.js"
+  }
+}
+</script>
+<script type="module" src="scenes.js"></script>
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
