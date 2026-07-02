@@ -1,7 +1,9 @@
-# Soufi Garden 360
+# Sioufi Garden 360
 
-A single-page, no-build-tools preview of Soufi Garden (ESDU), playing 10
-sequential 360° video clips with interactive labels. Built on
+A single-page, no-build-tools interactive map and 360° video tour of Sioufi
+Garden (Beirut, Achrafieh). The site opens on a pannable/zoomable map of the
+real park; tapping a pin drops you into that spot's 360° video, with
+interactive info pins inside the sphere. Built on
 [Photo Sphere Viewer v5](https://photo-sphere-viewer.js.org/) loaded from
 jsDelivr — no npm install, no bundler.
 
@@ -32,12 +34,40 @@ extension, etc.) — the only requirement is that it's HTTP(S), not `file://`.
 soufi-garden-360/
   index.html      the page shell (loads PSV from CDN via an import map)
   style.css       all visual design / layout / animations
-  scenes.js       <-- hand-edit this to add your real clips + labels
-  app.js          viewer wiring: navigation, markers, popups, gyroscope
+  scenes.js       <-- hand-edit this: scenes, map pins, and how to add more
+                      (see the comment block above `mapHotspots`)
+  app.js          viewer wiring: landing map, navigation, markers, popups,
+                   gyroscope, in-tour minimap
   videos/
     README.md     exact filenames expected, see there before adding footage
-    *.mp4         your 10 real clips go here
+    *.mp4         the filmed clips
+  images/
+    thumbs/        still-frame previews shown in the landing map's tooltip,
+                    one per filmed clip (hotspot-<id>.jpg)
+  map/
+    README.md     provenance of the site map + what's still unconfirmed
+    sioufi-garden-map.svg   the real site map (source: official as-built
+                    landscape drawings), used for both the full-screen
+                    landing map and the in-tour minimap
 ```
+
+## Site map
+
+The site **opens on a full-screen, pannable/zoomable map** of the real
+garden (drag to pan, +/− to zoom). Every plotted point from the source
+drawings is shown as a pin — green leaf pins have footage and open a tooltip
+with a real preview still + an "Explore in 360°" button; muted gray pins are
+plotted but have no footage yet ("coming soon"). A **Map** button in the
+in-tour control bar returns here without losing the viewer's state.
+
+The same image also powers the small persistent minimap shown while touring
+(bottom-left, via Photo Sphere Viewer's `MapPlugin`), so both views always
+agree on where everything is.
+
+All pin data — position, name, description, and which scene (if any) it
+links to — lives in `mapHotspots` in `scenes.js`. See the comment block
+above it for exactly how to move a pin, add a new "coming soon" pin, or
+link footage to one; nothing in `app.js` needs to change for routine edits.
 
 ## Deploying to GitHub Pages
 
@@ -81,15 +111,22 @@ This project is 100% static (no build step), so GitHub Pages can serve it as-is.
 
 ## What's implemented
 
+- Full-screen, pannable/zoomable landing map as the site's entry point, with
+  real preview-still tooltips and click-through into the matching 360° clip
 - Full 360° drag/scroll/pinch navigation via Photo Sphere Viewer core
-- Sequential clip playback with custom Play/Pause, Previous/Next, Reset View
+- Sequential clip playback with custom Play/Pause, Previous/Next, Reset View,
+  and a Map button to return to the landing map without losing viewer state
 - Video pauses without breaking sphere navigation — you can keep looking
   around a frozen frame indefinitely
-- Animated leaf-pin markers per scene, defined in `scenes.js`
+- Animated leaf-pin markers per scene, defined in `scenes.js`. Tapping one
+  shows a small popup anchored above the pin; tapping the same pin again
+  expands it into the full, more-readable popup card
 - Custom popup card (not PSV's built-in side panel) with title/description/
   optional image, fade+scale transition, safe positioning on mobile
   (becomes a bottom sheet under 480px width)
 - Custom loading overlay per scene transition
+- Glassmorphic, auto-hiding chrome (top bar + controls fade out after a few
+  seconds of inactivity for an immersive view, and reappear on interaction)
 - Gyroscope tilt-to-look with an explicit "Tap to enable" prompt that
   properly triggers iOS's `DeviceOrientationEvent.requestPermission()` inside
   a user gesture (required since iOS 13)
